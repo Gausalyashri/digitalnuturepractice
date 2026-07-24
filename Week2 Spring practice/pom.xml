@@ -1,0 +1,50 @@
+# spring-core-handson — Hands-on 4: Load Country from Spring XML
+
+A plain Spring Core (no Spring Boot, no web) exercise: read a `Country`
+bean out of an XML-configured `ApplicationContext` and print it.
+
+This is a **separate project** from `spring-learn` (the REST service you
+built earlier) — kept apart deliberately so its `Country` class
+(`com.cognizant.springlearn.Country`) and its `country.xml` (a Spring
+*bean* config file) don't collide with the REST project's
+`com.cognizant.springlearn.model.Country` and its `country.xml` (a
+plain *data* file).
+
+## Project structure
+
+```
+spring-core-handson/
+├── pom.xml
+├── src/main/java/com/cognizant/springlearn/
+│   ├── Country.java
+│   └── SpringLearnApplication.java
+└── src/main/resources/
+    ├── country.xml     (Spring bean definition for "country")
+    └── logback.xml     (enables DEBUG logging so you can see the calls)
+```
+
+## How to run in VS Code
+
+1. Unzip and open the `spring-core-handson` folder.
+2. Let the Java extensions index the Maven project (needs the
+   "Extension Pack for Java").
+3. Open `SpringLearnApplication.java` and click **Run** above `main()`,
+   or from a terminal:
+   ```bash
+   cd spring-core-handson
+   mvn compile exec:java -Dexec.mainClass=com.cognizant.springlearn.SpringLearnApplication
+   ```
+   (or `mvn package` then `java -jar target/spring-core-handson.jar`)
+
+## Expected console output
+
+```
+... DEBUG com.cognizant.springlearn.Country - Inside Country Constructor.
+... DEBUG com.cognizant.springlearn.Country - Inside setCode(). Setting code to: IN
+... DEBUG com.cognizant.springlearn.Country - Inside setName(). Setting name to: India
+... DEBUG com.cognizant.springlearn.SpringLearnApplication - Country : Country [code=IN, name=India]
+```
+
+Notice the **order**: the no-arg constructor runs first, *then* the
+setters — this is exactly how Spring builds a bean from `<property>`
+tags (see the SME notes on `context.getBean()` below).
